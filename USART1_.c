@@ -53,11 +53,13 @@ void USART1_TX(void)
 	USART1->CR1 |= CR1_UE;
 }
 
-void usart1_write()
+void usart1_write(int ch)
 {
 	/*make sure transmit data register is empty before sending
 	 * then write to transmit data register*/
-	USART1->DR	= (ch & 0xFF);
+	
+	while (!(USART1->SR & USART_SR_TXE));
+	USART1->DR = (ch & 0xFF);
 }
 
 static void usart_set_baudrate(USART_TypeDef *USARTx, uint32_t PeriphClk, uint32_t BaudRate)
